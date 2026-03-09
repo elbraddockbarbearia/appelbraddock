@@ -1,0 +1,30 @@
+import React, { useState, useEffect } from 'react';
+import { WifiOff } from 'lucide-react';
+
+const OfflineBanner = () => {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  if (!isOffline) return null;
+
+  return (
+    <div className="bg-barber-gold text-barber-black py-2 px-4 shadow-lg flex items-center justify-center gap-2 z-50 sticky top-0 font-medium text-sm w-full animate-in slide-in-from-top fade-in duration-300">
+      <WifiOff size={16} />
+      <p>Conexão perdida. Exibindo dados salvos localmente.</p>
+    </div>
+  );
+};
+
+export default OfflineBanner;

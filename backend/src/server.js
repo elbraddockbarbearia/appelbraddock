@@ -1,0 +1,73 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const dotenv = require('dotenv');
+const connectDB = require('../data/db');
+
+dotenv.config();
+
+const app = express();
+
+// Connect Database
+connectDB();
+
+// Middleware
+// Middleware
+app.use(helmet()); // Security headers
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173', 
+      'http://localhost:4173', // Vite preview port
+      process.env.FRONTEND_URL 
+    ].filter(Boolean); // Remove unndefined
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+
+// Global Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window`
+  message: 'Muitas requisições deste IP, tente novamente mais tarde.'
+});
+app.use('/api', limiter);
+
+// Stricter Rate Limiting for Auth
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 requests
+  message: 'Muitas tentativas de login, tente novamente mais tarde.'
+});
+app.use('/api/auth', authLimiter);
+
+// Background Jobs
+require('./jobs/reminderJob');
+
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/clients', require('./routes/clientRoutes'));
+app.use('/api/services', require('./routes/serviceRoutes'));
+app.use('/api/appointments', require('./routes/appointmentRoutes'));
+app.use('/api/barbers', require('./routes/barberRoutes'));
+app.use('/api/barber', require('./routes/barberPortalRoutes'));
+app.use('/api/cashier', require('./routes/cashierRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/settings', require('./routes/settingsRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
+
+app.get('/', (req, res) => res.send('Barbershop API Running'));
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

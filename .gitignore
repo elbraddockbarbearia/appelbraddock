@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-ssr/
+.vscode/
+*client_secret*.json
+
+# Normally we ignore .env, but user explicitly requested to push for testing
+# .env
+# .env.example
