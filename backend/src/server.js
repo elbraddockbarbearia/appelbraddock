@@ -17,11 +17,14 @@ connectDB();
 app.use(helmet()); // Security headers
 const corsOptions = {
   origin: function (origin, callback) {
+    const envFrontend = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null;
+    
     const allowedOrigins = [
       'http://localhost:5173', 
-      'http://localhost:4173', // Vite preview port
-      process.env.FRONTEND_URL 
-    ].filter(Boolean); // Remove unndefined
+      'http://localhost:4173',
+      'https://elbraddock-app.onrender.com', // Hard fallback for production
+      envFrontend
+    ].filter(Boolean);
     
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
