@@ -17,22 +17,28 @@ connectDB();
 app.use(helmet()); // Security headers
 const corsOptions = {
   origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
     const envFrontend = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null;
     
     const allowedOrigins = [
       'http://localhost:5173', 
       'http://localhost:4173',
-      'https://elbraddock-app.onrender.com', // Hard fallback for production
+      'https://elbraddock-app.onrender.com',
       envFrontend
     ].filter(Boolean);
     
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('onrender.com')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
