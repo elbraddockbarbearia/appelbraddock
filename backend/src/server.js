@@ -12,6 +12,9 @@ const app = express();
 // Connect Database
 connectDB();
 
+// Trust reverse proxy (important for Render, Heroku to pass original IP to rate-limiter)
+app.set('trust proxy', 1);
+
 // Middleware
 // Middleware
 app.use(helmet()); // Security headers

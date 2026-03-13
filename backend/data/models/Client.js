@@ -58,7 +58,6 @@ clientSchema.methods.matchPassword = async function (entered) {
 };
 
 // Indexes for optimization
-clientSchema.index({ phone: 1 });
 clientSchema.index({ total_cuts: -1 });
 
 module.exports = mongoose.model('Client', clientSchema);

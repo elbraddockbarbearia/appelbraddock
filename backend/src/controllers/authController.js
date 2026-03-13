@@ -8,9 +8,13 @@ const signToken = (payload) =>
 // ─── Admin Login ─────────────────────────────────────────────────────────────
 const loginAdmin = async (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-  if (password !== adminPassword) {
+  
+  // Allow multiple admins if configured, fallback to default 3 admins
+  const configuredPasswords = process.env.ADMIN_PASSWORDS 
+    ? process.env.ADMIN_PASSWORDS.split(',')
+    : ['admin123', 'admin456', 'admin789'];
+    
+  if (!configuredPasswords.includes(password)) {
     return res.status(401).json({ message: 'Credenciais inválidas.' });
   }
 
