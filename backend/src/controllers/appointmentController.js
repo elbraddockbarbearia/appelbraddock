@@ -7,7 +7,7 @@ const { sendConfirmationEmail } = require('../services/emailService');
 // Create appointment
 const createAppointment = async (req, res) => {
   try {
-    const { client_id, barber_id, date, time, service_id, price } = req.body;
+    let { client_id, barber_id, date, time, service_id, price } = req.body;
 
     // ── Verificação de plano ────────────────────────────────────────────────
     if (client_id) {
@@ -31,6 +31,10 @@ const createAppointment = async (req, res) => {
           return res.status(403).json({
             message: '⚠️ Você já usou todos os cortes deste mês. Renove para agendar.',
           });
+        }
+        // Usar plano se estiver ativo
+        if (plano?.ativo && plano?.cortesRestantes > 0) {
+          price = 0;
         }
       }
     }
@@ -208,9 +212,24 @@ const blockAppointment = async (req, res) => {
   }
 };
 
+// Get all appointments for a logged-in client
+const getClientAppointments = async (req, res) => {
+  try {
+    const appointments = await Appointment.find({ client_id: req.user.id })
+      .populate('service', 'name price duration')
+      .populate('barber_id', 'name')
+      .sort({ created_at: -1 });
+
+    res.json(appointments);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createAppointment,
   getAppointmentsByDate,
   updateAppointmentStatus,
-  blockAppointment
+  blockAppointment,
+  getClientAppointments
 };

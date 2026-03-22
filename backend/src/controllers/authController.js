@@ -51,6 +51,7 @@ const registerClient = async (req, res) => {
       birthday: client.birthday,
       total_cuts: client.total_cuts,
       points: client.points,
+      plano: client.plano,
     };
 
     const token = signToken({ id: client._id, role: 'client' });
@@ -94,6 +95,7 @@ const loginClient = async (req, res) => {
       birthday: client.birthday,
       total_cuts: client.total_cuts,
       points: client.points,
+      plano: client.plano,
     };
 
     const token = signToken({ id: client._id, role: 'client' });

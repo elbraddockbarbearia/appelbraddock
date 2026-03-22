@@ -69,13 +69,14 @@ const Schedule = () => {
   const handleConfirm = async () => {
     setLoading(true);
     try {
+      const isCoveredByPlan = client?.plano?.ativo && client?.plano?.cortesRestantes > 0;
       await api.post('/appointments', {
         client_id: client._id,
         barber_id: formData.barber?._id || null,
         date: formData.date,
         time: formData.time,
         service_id: formData.service._id,
-        price: formData.service.price
+        price: isCoveredByPlan ? 0 : formData.service.price
       });
       setStep(5);
     } catch (error) {
@@ -212,7 +213,16 @@ const Schedule = () => {
               <h4 className="text-sm font-medium text-barber-gray mb-2">Resumo</h4>
               <p className="font-semibold">{formData.service.name}</p>
               <p className="text-sm">{formData.date} às {formData.time}</p>
-              <p className="text-barber-gold font-bold mt-2">Total: R$ {formData.service.price}</p>
+              <div className="mt-2 text-sm">
+                {client?.plano?.ativo && client?.plano?.cortesRestantes > 0 ? (
+                  <>
+                    <p className="text-gray-400 line-through">R$ {formData.service.price.toFixed(2)}</p>
+                    <p className="text-green-500 font-bold text-base mt-1">R$ 0,00 (Coberto pelo Plano)</p>
+                  </>
+                ) : (
+                  <p className="text-barber-gold font-bold text-base">Total: R$ {formData.service.price.toFixed(2)}</p>
+                )}
+              </div>
             </div>
 
             <button onClick={handleConfirm} className="btn-primary w-full mt-6" disabled={!formData.name || !formData.phone || loading}>

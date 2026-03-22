@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createAppointment, getAppointmentsByDate, updateAppointmentStatus, blockAppointment } = require('../controllers/appointmentController');
+const { createAppointment, getAppointmentsByDate, updateAppointmentStatus, blockAppointment, getClientAppointments } = require('../controllers/appointmentController');
 const protect = require('../middleware/authMiddleware');
 const validateData = require('../middleware/validateData');
 const { createAppointmentSchema } = require('../validations/schemas');
@@ -8,6 +8,9 @@ const { createAppointmentSchema } = require('../validations/schemas');
 router.route('/')
   .post(validateData(createAppointmentSchema), createAppointment)
   .get(getAppointmentsByDate);
+
+router.route('/client')
+  .get(protect(['client']), getClientAppointments);
 
 router.route('/block')
   .post(protect(['admin']), blockAppointment);
