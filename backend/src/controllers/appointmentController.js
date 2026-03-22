@@ -8,7 +8,34 @@ const { sendConfirmationEmail } = require('../services/emailService');
 const createAppointment = async (req, res) => {
   try {
     const { client_id, barber_id, date, time, service_id, price } = req.body;
-    
+
+    // ── Verificação de plano ────────────────────────────────────────────────
+    if (client_id) {
+      const clientForPlan = await Client.findById(client_id).select('name plano');
+      if (clientForPlan) {
+        const plano = clientForPlan.plano;
+        const hoje = new Date();
+
+        // Auto-expirar plano se a data de vencimento já passou
+        if (plano?.ativo && plano?.dataVencimento && new Date(plano.dataVencimento) < hoje) {
+          clientForPlan.plano.ativo = false;
+          clientForPlan.plano.cortesRestantes = 0;
+          await clientForPlan.save();
+          return res.status(403).json({
+            message: '⚠️ Plano vencido! Renove a mensalidade para agendar.',
+          });
+        }
+
+        // Bloquear se plano inativo ou sem cortes restantes
+        if (plano?.ativo && plano?.cortesRestantes <= 0) {
+          return res.status(403).json({
+            message: '⚠️ Você já usou todos os cortes deste mês. Renove para agendar.',
+          });
+        }
+      }
+    }
+    // ── Fim verificação de plano ────────────────────────────────────────────
+
     // Check for double booking (per barber if specified, otherwise global)
     const doubleCheck = { date, time, status: { $nin: ['cancelled', 'blocked'] } };
     if (barber_id) doubleCheck.barber_id = barber_id;
@@ -119,6 +146,10 @@ const updateAppointmentStatus = async (req, res) => {
       if (client) {
         client.total_cuts += 1;
         client.points += 1; // Assuming 1 pt per cut
+        // Decrementar cortes do plano se estiver ativo
+        if (client.plano?.ativo && client.plano.cortesRestantes > 0) {
+          client.plano.cortesRestantes -= 1;
+        }
         await client.save();
       }
     } else if (oldStatus === 'completed' && status !== 'completed') {
@@ -127,6 +158,13 @@ const updateAppointmentStatus = async (req, res) => {
       if (client) {
         client.total_cuts = Math.max(0, client.total_cuts - 1);
         client.points = Math.max(0, client.points - 1);
+        // Reverter decremento do plano
+        if (client.plano?.ativo) {
+          client.plano.cortesRestantes = Math.min(
+            client.plano.cortesTotais,
+            client.plano.cortesRestantes + 1
+          );
+        }
         await client.save();
       }
     }

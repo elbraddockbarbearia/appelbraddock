@@ -2,20 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, CalendarDays, Users, Users2,
-  DollarSign, Settings, LogOut, Menu, X, Scissors, TrendingUp, Bell
+  DollarSign, Settings, LogOut, Menu, X, Scissors, TrendingUp, Bell, CreditCard
 } from 'lucide-react';
 import api from '../services/api';
 
 const menuItems = [
-  { name: 'Dashboard',  icon: LayoutDashboard, path: '/admin' },
-  { name: 'Agenda',     icon: CalendarDays,    path: '/admin/agenda' },
-  { name: 'Barbeiros',  icon: Users2,          path: '/admin/barbeiros' },
-  { name: 'Ranking',    icon: Users,           path: '/admin/ranking' },
-  { name: 'Serviços',   icon: Scissors,        path: '/admin/servicos' },
-  { name: 'Comissão',   icon: TrendingUp,      path: '/admin/comissao' },
-  { name: 'Caixa',      icon: DollarSign,      path: '/admin/cashier' },
-  { name: 'Retenção',   icon: Users,           path: '/admin/retencao' },
-  { name: 'Ajustes',    icon: Settings,        path: '/admin/settings' },
+  { name: 'Dashboard',    icon: LayoutDashboard, path: '/admin' },
+  { name: 'Agenda',       icon: CalendarDays,    path: '/admin/agenda' },
+  { name: 'Barbeiros',    icon: Users2,          path: '/admin/barbeiros' },
+  { name: 'Ranking',      icon: Users,           path: '/admin/ranking' },
+  { name: 'Mensalidade',  icon: CreditCard,      path: '/admin/mensalidade' },
+  { name: 'Serviços',     icon: Scissors,        path: '/admin/servicos' },
+  { name: 'Comissão',     icon: TrendingUp,      path: '/admin/comissao' },
+  { name: 'Caixa',        icon: DollarSign,      path: '/admin/cashier' },
+  { name: 'Retenção',     icon: Users,           path: '/admin/retencao' },
+  { name: 'Ajustes',      icon: Settings,        path: '/admin/settings' },
 ];
 
 const NavItem = ({ item, onClick }) => (

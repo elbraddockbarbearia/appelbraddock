@@ -77,6 +77,7 @@ app.use('/api/cashier', require('./routes/cashierRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/settings', require('./routes/settingsRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/plano', require('./routes/planRoutes'));
 
 app.get('/', (req, res) => res.send('Barbershop API Running'));
 

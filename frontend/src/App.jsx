@@ -22,6 +22,7 @@ const Register = lazy(() => import('./pages/Client/Register'));
 const AdminLogin = lazy(() => import('./pages/Admin/Login'));
 const AdminDashboard = lazy(() => import('./pages/Admin/Dashboard'));
 const AdminAgenda = lazy(() => import('./pages/Admin/Agenda'));
+const AdminMensalidade = lazy(() => import('./pages/Admin/Mensalidade'));
 const AdminCashier = lazy(() => import('./pages/Admin/Cashier'));
 const AdminRanking = lazy(() => import('./pages/Admin/Ranking'));
 const AdminSettings = lazy(() => import('./pages/Admin/Settings'));
@@ -62,6 +63,7 @@ function App() {
             <Route element={<AdminRoute />}>
               <Route path="/admin"             element={<Suspense fallback={<PageLoader />}><AdminDashboard /></Suspense>} />
               <Route path="/admin/agenda"      element={<Suspense fallback={<PageLoader />}><AdminAgenda /></Suspense>} />
+              <Route path="/admin/mensalidade" element={<Suspense fallback={<PageLoader />}><AdminMensalidade /></Suspense>} />
               <Route path="/admin/ranking"     element={<Suspense fallback={<PageLoader />}><AdminRanking /></Suspense>} />
               <Route path="/admin/servicos"    element={<Suspense fallback={<PageLoader />}><AdminServicos /></Suspense>} />
               <Route path="/admin/barbeiros"   element={<Suspense fallback={<PageLoader />}><AdminBarbeiros /></Suspense>} />

@@ -10,12 +10,10 @@
 const { google } = require('googleapis');
 const http = require('http');
 const url = require('url');
-require('dotenv').config();
 
-const CLIENT_ID     = process.env.GOOGLE_CLIENT_ID;
-const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URI  = 'http://localhost:8080/oauth2callback';
-
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'COLE_SEU_CLIENT_ID_AQUI.apps.googleusercontent.com';
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'COLE_SEU_CLIENT_SECRET_AQUI';
+const REDIRECT_URI = 'http://localhost:8080/oauth2callback';
 
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
