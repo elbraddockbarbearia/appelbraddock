@@ -34,12 +34,11 @@ const AdminLogin = () => {
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: 'linear-gradient(135deg, #ef4444, #991b1b)', boxShadow: '0 0 30px rgba(239,68,68,0.2)' }}
-          >
-            <ShieldAlert size={28} style={{ color: '#fff' }} />
-          </div>
+          <img 
+            src="/logos/Logo-ElBraddock-Dourado.png" 
+            alt="El Braddock" 
+            className="w-32 mx-auto mb-6 drop-shadow-[0_0_20px_rgba(239,68,68,0.2)]" 
+          />
           <h1 className="text-2xl font-display font-bold text-white">Acesso Restrito</h1>
           <p className="text-sm mt-1" style={{ color: '#a3a3a3' }}>Área exclusiva para administradores</p>
         </div>

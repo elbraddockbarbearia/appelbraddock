@@ -5,8 +5,11 @@ import { Scissors } from 'lucide-react';
 // Loading Fallback Component
 const PageLoader = () => (
   <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-barber-black text-barber-gold">
-    <Scissors size={40} className="animate-spin duration-1000 mb-4" />
-    <h2 className="text-xl font-display font-bold tracking-widest animate-pulse">EL BRADDOCK</h2>
+    <img 
+      src="/logos/Logo-ElBraddock-Dourado.png" 
+      alt="El Braddock" 
+      className="w-32 animate-pulse mb-4" 
+    />
   </div>
 );
 

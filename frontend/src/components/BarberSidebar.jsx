@@ -39,9 +39,12 @@ const BarberSidebar = ({ children, unreadCount = 0 }) => {
     <>
       {/* Brand */}
       <div className="mb-8 text-center">
-        <div className="flex items-center justify-center gap-2 mb-1">
-          <Scissors className="text-barber-gold" size={22} />
-          <h2 className="text-xl font-display font-bold text-barber-gold tracking-widest">EL BRADDOCK</h2>
+        <div className="flex justify-center mb-1">
+          <img 
+            src="/logos/Logo-ElBraddock-Dourado.png" 
+            alt="El Braddock" 
+            className="w-32" 
+          />
         </div>
         <p className="text-barber-gray text-xs tracking-widest">PORTAL BARBEIRO</p>
       </div>
@@ -105,9 +108,12 @@ const BarberSidebar = ({ children, unreadCount = 0 }) => {
       {/* Main */}
       <main className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-barber-light" style={{ backgroundColor: 'var(--color-barber-dark)' }}>
-          <div className="flex items-center gap-2">
-            <Scissors className="text-barber-gold" size={18} />
-            <span className="font-display font-bold text-barber-gold tracking-widest text-sm">EL BRADDOCK</span>
+          <div className="flex items-center">
+            <img 
+              src="/logos/Logo-ElBraddock-Dourado.png" 
+              alt="El Braddock" 
+              className="w-24" 
+            />
           </div>
           <button onClick={() => setMobileOpen(true)} className="p-2 rounded-lg hover:bg-barber-light">
             <Menu size={22} />
