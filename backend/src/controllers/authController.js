@@ -25,7 +25,10 @@ const loginAdmin = async (req, res) => {
 // ─── Client Register ─────────────────────────────────────────────────────────
 const registerClient = async (req, res) => {
   try {
-    const { name, nickname, phone, email, birthday, password } = req.body;
+    let { name, nickname, phone, email, birthday, password } = req.body;
+    
+    // Sanitize phone (keep only numbers)
+    if (phone) phone = phone.replace(/\D/g, '');
 
     if (!name || !phone || !password) {
       return res.status(400).json({ message: 'Nome, telefone e senha são obrigatórios.' });
@@ -63,7 +66,10 @@ const registerClient = async (req, res) => {
 // ─── Client Login ─────────────────────────────────────────────────────────────
 const loginClient = async (req, res) => {
   try {
-    const { phone, password } = req.body;
+    let { phone, password } = req.body;
+
+    // Sanitize phone
+    if (phone) phone = phone.replace(/\D/g, '');
 
     if (!phone || !password) {
       return res.status(400).json({ message: 'Telefone e senha são obrigatórios.' });
