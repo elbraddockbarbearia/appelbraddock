@@ -70,4 +70,43 @@ const desativarPlano = async (req, res) => {
   }
 };
 
-module.exports = { ativarPlano, consultarPlano, desativarPlano };
+// ─── Solicitar Ativação (Cliente) ───────────────────────────────────────────
+const requestPlano = async (req, res) => {
+  try {
+    const { tipo } = req.body;
+    const client = await Client.findById(req.user.id);
+    if (!client) return res.status(404).json({ message: 'Cliente não encontrado.' });
+
+    await createNotification({
+      recipient_type: 'admin',
+      type: 'plan_request',
+      message: `📢 ${client.name} tem interesse no Plano ${tipo.toUpperCase()}.`,
+      data: { clientId: client._id, name: client.name, phone: client.phone, tipo }
+    });
+
+    res.json({ message: 'Solicitação enviada!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ─── Solicitar Cancelamento (Cliente) ───────────────────────────────────────
+const requestCancelamento = async (req, res) => {
+  try {
+    const client = await Client.findById(req.user.id);
+    if (!client) return res.status(404).json({ message: 'Cliente não encontrado.' });
+
+    await createNotification({
+      recipient_type: 'admin',
+      type: 'plan_cancel_request',
+      message: `⚠️ ${client.name} solicitou o CANCELAMENTO do plano.`,
+      data: { clientId: client._id, name: client.name, phone: client.phone }
+    });
+
+    res.json({ message: 'Solicitação de cancelamento enviada!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { ativarPlano, consultarPlano, desativarPlano, requestPlano, requestCancelamento };

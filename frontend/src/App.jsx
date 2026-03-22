@@ -20,6 +20,7 @@ const ClientHistory = lazy(() => import('./pages/Client/History'));
 const ClientProfile = lazy(() => import('./pages/Client/Profile'));
 const Login = lazy(() => import('./pages/Client/Login'));
 const Register = lazy(() => import('./pages/Client/Register'));
+const Subscription = lazy(() => import('./pages/Client/Subscription'));
 
 // Lazy Loaded Admin Pages
 const AdminLogin = lazy(() => import('./pages/Admin/Login'));
@@ -58,6 +59,7 @@ function App() {
             <Route path="/profile"   element={<Suspense fallback={<PageLoader />}><ClientProfile /></Suspense>} />
             <Route path="/login"     element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
             <Route path="/register"  element={<Suspense fallback={<PageLoader />}><Register /></Suspense>} />
+            <Route path="/subscription" element={<Suspense fallback={<PageLoader />}><Subscription /></Suspense>} />
 
             {/* Admin Public Route */}
             <Route path="/admin/login"     element={<Suspense fallback={<PageLoader />}><AdminLogin /></Suspense>} />

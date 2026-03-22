@@ -12,4 +12,9 @@ router.post('/:clientId/ativar', protect(['admin']), ativarPlano);
 // PUT  /api/plano/:clientId/desativar → Desativar plano (admin)
 router.put('/:clientId/desativar', protect(['admin']), desativarPlano);
 
+// Client Requests (User)
+const { requestPlano, requestCancelamento } = require('../controllers/planController');
+router.post('/request', protect(['client']), requestPlano);
+router.post('/request-cancel', protect(['client']), requestCancelamento);
+
 module.exports = router;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, Scissors, Phone, Mail, CalendarDays, LogOut, Cake, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Scissors, Phone, Mail, CalendarDays, LogOut, Cake, ChevronRight, CreditCard } from 'lucide-react';
 import { getTier, getTierProgress, cutsToNextTier } from '../../utils/loyalty';
 
 const getClient = () => {
@@ -63,11 +63,19 @@ const ClientProfile = () => {
         {/* Tier Badge */}
         {(() => {
           const tier = getTier(client.totalCuts || 0);
+          const hasActivePlan = client.plano?.ativo;
           return (
-            <span className="mt-2 px-4 py-1 rounded-full text-sm font-bold"
-              style={{ backgroundColor: tier.bg, color: tier.color, border: `1px solid ${tier.border}` }}>
-              {tier.label}
-            </span>
+            <div className="flex flex-col items-center gap-2 mt-2">
+              <span className="px-4 py-1 rounded-full text-sm font-bold"
+                style={{ backgroundColor: tier.bg, color: tier.color, border: `1px solid ${tier.border}` }}>
+                {tier.label}
+              </span>
+              {hasActivePlan && (
+                <span className="px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tighter bg-green-500/10 text-green-500 border border-green-500/20">
+                  Plano Ativo
+                </span>
+              )}
+            </div>
           );
         })()}
       </div>
@@ -141,6 +149,18 @@ const ClientProfile = () => {
           <div className="flex items-center gap-3">
             <CalendarDays size={18} style={{ color: 'var(--color-barber-gold)' }} />
             <span className="text-sm font-medium">Agendar Horário</span>
+          </div>
+          <ChevronRight size={16} style={{ color: 'var(--color-barber-gray)' }} />
+        </Link>
+        <Link
+          to="/subscription"
+          className="flex items-center justify-between p-3 rounded-lg transition-colors"
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-barber-light)'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = ''}
+        >
+          <div className="flex items-center gap-3">
+            <CreditCard size={18} style={{ color: 'var(--color-barber-gold)' }} />
+            <span className="text-sm font-medium">Minha Assinatura / Planos</span>
           </div>
           <ChevronRight size={16} style={{ color: 'var(--color-barber-gray)' }} />
         </Link>
