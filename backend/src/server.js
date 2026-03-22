@@ -32,7 +32,7 @@ const corsOptions = {
       envFrontend
     ].filter(Boolean);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('onrender.com')) {
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('onrender.com') || origin.includes('localhost')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
