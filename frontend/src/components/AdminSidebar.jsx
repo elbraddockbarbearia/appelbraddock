@@ -2,20 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, CalendarDays, Users, Users2,
-  DollarSign, Settings, LogOut, Menu, X, Scissors, TrendingUp, Bell
+  DollarSign, Settings, LogOut, Menu, X, Scissors, TrendingUp, Bell, CreditCard
 } from 'lucide-react';
 import api from '../services/api';
 
 const menuItems = [
-  { name: 'Dashboard',  icon: LayoutDashboard, path: '/admin' },
-  { name: 'Agenda',     icon: CalendarDays,    path: '/admin/agenda' },
-  { name: 'Barbeiros',  icon: Users2,          path: '/admin/barbeiros' },
-  { name: 'Ranking',    icon: Users,           path: '/admin/ranking' },
-  { name: 'Serviços',   icon: Scissors,        path: '/admin/servicos' },
-  { name: 'Comissão',   icon: TrendingUp,      path: '/admin/comissao' },
-  { name: 'Caixa',      icon: DollarSign,      path: '/admin/cashier' },
-  { name: 'Retenção',   icon: Users,           path: '/admin/retencao' },
-  { name: 'Ajustes',    icon: Settings,        path: '/admin/settings' },
+  { name: 'Dashboard',    icon: LayoutDashboard, path: '/admin' },
+  { name: 'Agenda',       icon: CalendarDays,    path: '/admin/agenda' },
+  { name: 'Barbeiros',    icon: Users2,          path: '/admin/barbeiros' },
+  { name: 'Ranking',      icon: Users,           path: '/admin/ranking' },
+  { name: 'Mensalidade',  icon: CreditCard,      path: '/admin/mensalidade' },
+  { name: 'Serviços',     icon: Scissors,        path: '/admin/servicos' },
+  { name: 'Comissão',     icon: TrendingUp,      path: '/admin/comissao' },
+  { name: 'Caixa',        icon: DollarSign,      path: '/admin/cashier' },
+  { name: 'Retenção',     icon: Users,           path: '/admin/retencao' },
+  { name: 'Ajustes',      icon: Settings,        path: '/admin/settings' },
 ];
 
 const NavItem = ({ item, onClick }) => (
@@ -121,9 +122,12 @@ const SidebarContent = ({ handleLogout, setMobileOpen }) => (
     {/* Brand + Bell */}
     <div className="mb-8">
       <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center gap-2">
-          <Scissors className="text-barber-gold" size={22} />
-          <h2 className="text-xl font-display font-bold text-barber-gold tracking-widest">EL BRADDOCK</h2>
+        <div className="flex justify-center mb-1">
+          <img 
+            src="/logos/Logo-ElBraddock-Dourado.png" 
+            alt="El Braddock" 
+            className="w-32" 
+          />
         </div>
         <NotificationBell />
       </div>
@@ -197,9 +201,12 @@ const AdminSidebar = ({ children }) => {
       <main className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         {/* Mobile Top Bar */}
         <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-barber-light" style={{ backgroundColor: 'var(--color-barber-dark)' }}>
-          <div className="flex items-center gap-2">
-            <Scissors className="text-barber-gold" size={18} />
-            <span className="font-display font-bold text-barber-gold tracking-widest text-sm">EL BRADDOCK</span>
+          <div className="flex items-center">
+            <img 
+              src="/logos/Logo-ElBraddock-Dourado.png" 
+              alt="El Braddock" 
+              className="w-24" 
+            />
           </div>
           <button
             onClick={() => setMobileOpen(true)}

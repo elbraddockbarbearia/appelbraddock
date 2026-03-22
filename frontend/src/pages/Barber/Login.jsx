@@ -32,12 +32,11 @@ const BarberLogin = () => {
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="text-center mb-10">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <Scissors size={36} style={{ color: 'var(--color-barber-gold)' }} />
-          </div>
-          <h1 className="text-4xl font-display font-bold" style={{ color: 'var(--color-barber-gold)' }}>
-            EL BRADDOCK
-          </h1>
+          <img 
+            src="/logos/Logo-ElBraddock-Dourado.png" 
+            alt="El Braddock" 
+            className="w-48 mx-auto mb-4 drop-shadow-[0_0_20px_rgba(203,160,82,0.2)]" 
+          />
           <p className="text-sm tracking-widest uppercase mt-1" style={{ color: 'var(--color-barber-gray)' }}>
             Portal do Barbeiro
           </p>

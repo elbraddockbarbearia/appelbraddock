@@ -48,12 +48,11 @@ const Home = () => {
           <p className="text-xs tracking-[0.35em] uppercase mb-3" style={{ color: 'var(--color-barber-gray)' }}>
             Bem-vindo à
           </p>
-          <h1
-            className="text-5xl font-display font-black tracking-wide uppercase mb-2"
-            style={{ color: 'var(--color-barber-gold)', textShadow: '0 0 40px rgba(203,160,82,0.3)' }}
-          >
-            El Braddock
-          </h1>
+          <img 
+            src="/logos/Logo-ElBraddock-principal.png" 
+            alt="El Braddock" 
+            className="w-56 mx-auto mb-2 drop-shadow-[0_0_40px_rgba(203,160,82,0.3)]" 
+          />
           <p className="text-sm tracking-[0.4em] uppercase" style={{ color: 'var(--color-barber-gray)' }}>
             Barbearia Premium
           </p>

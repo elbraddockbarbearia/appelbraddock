@@ -2,22 +2,14 @@ const cron = require('node-cron');
 const Appointment = require('../../data/models/Appointment');
 const Client = require('../../data/models/Client');
 const { sendReminderEmail } = require('../services/emailService');
+const { createNotification } = require('../controllers/notificationController');
 
-// Run every 5 minutes
+// Run every 5 minutes — lembretes de agendamento por email
 cron.schedule('*/5 * * * *', async () => {
   try {
     const now = new Date();
-    // We want to find appointments happening within the next 1 hour 
-    // and up to 1 hour and 5 minutes (to avoid missing any between the 5-min intervals).
-    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
     const oneHourAndFiveMinsFromNow = new Date(now.getTime() + 65 * 60 * 1000);
 
-    // We'll approximate date parsing based on how 'date' and 'time' are structured in the schema.
-    // 'date' is a Date object (usually midnight UTC if passed from a picker).
-    // 'time' is a String "HH:MM".
-    // Alternatively, a simpler approach is fetching appointments for the day, and validating times in memory.
-    
-    // Start of current day to End of current day (Local/Server time approximation)
     const startOfDay = new Date(now);
     startOfDay.setHours(0, 0, 0, 0);
 
@@ -31,19 +23,11 @@ cron.schedule('*/5 * * * *', async () => {
     });
 
     for (const appt of appointmentsToday) {
-      // Parse string "HH:MM"
       const [hours, minutes] = appt.time.split(':').map(Number);
-      
       const apptDateTime = new Date(appt.date);
-      // Adjust timezone off-by-one by keeping it attached to the actual date object hours,
-      // or parsing strictly by building a local date.
-      // Easiest is to set hours and minutes to the 'date':
       apptDateTime.setHours(hours, minutes, 0, 0);
 
-      // If the appointment time falls in [now, now + 1hr5m]
-      // And it's technically > now (we don't want to remind if it's already past the time suddenly)
       if (apptDateTime > now && apptDateTime <= oneHourAndFiveMinsFromNow) {
-        // Find client email
         const client = await Client.findById(appt.client_id);
         if (client && client.email) {
           await sendReminderEmail(client.email, client.name || client.nickname, {
@@ -52,8 +36,6 @@ cron.schedule('*/5 * * * *', async () => {
             service: appt.service
           });
         }
-        
-        // Mark as sent regardless if they have email or not (we checked them).
         appt.reminderSent = true;
         await appt.save();
       }
@@ -63,3 +45,51 @@ cron.schedule('*/5 * * * *', async () => {
     console.error('Error running reminder cron job:', error.message);
   }
 });
+
+// ─── Cron de mensalidade — roda todo dia às 09:00 ────────────────────────────
+cron.schedule('0 9 * * *', async () => {
+  try {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const em3Dias = new Date(hoje);
+    em3Dias.setDate(em3Dias.getDate() + 3);
+
+    const clientesAtivos = await Client.find({ 'plano.ativo': true });
+
+    for (const client of clientesAtivos) {
+      const vencimento = new Date(client.plano.dataVencimento);
+      vencimento.setHours(0, 0, 0, 0);
+
+      const dataFormatada = vencimento.toLocaleDateString('pt-BR');
+
+      // Lembrete 3 dias antes
+      if (vencimento.getTime() === em3Dias.getTime()) {
+        await createNotification({
+          recipient_type: 'admin',
+          type: 'plan_expiring',
+          message: `⏰ Plano de ${client.name} vence em 3 dias (${dataFormatada}). Entre em contato para renovar.`,
+          data: { clientId: client._id },
+        });
+      }
+
+      // Expirar no dia do vencimento
+      if (vencimento.getTime() === hoje.getTime()) {
+        client.plano.ativo = false;
+        client.plano.cortesRestantes = 0;
+        await client.save();
+
+        await createNotification({
+          recipient_type: 'admin',
+          type: 'plan_expired',
+          message: `🚨 Plano de ${client.name} venceu hoje (${dataFormatada}). Renovação pendente.`,
+          data: { clientId: client._id },
+        });
+      }
+    }
+
+  } catch (error) {
+    console.error('Erro no cron de mensalidade:', error.message);
+  }
+});
+

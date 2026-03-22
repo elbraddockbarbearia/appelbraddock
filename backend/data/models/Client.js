@@ -43,6 +43,14 @@ const clientSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  plano: {
+    ativo: { type: Boolean, default: false },
+    tipo: { type: String, enum: ['normal', 'vip'], default: 'normal' },
+    dataPagamento: { type: Date, default: null },
+    dataVencimento: { type: Date, default: null },
+    cortesRestantes: { type: Number, default: 0 },
+    cortesTotais: { type: Number, default: 4 },
+  },
 }, { timestamps: true });
 
 // Hash password before saving

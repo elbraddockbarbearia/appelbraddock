@@ -43,12 +43,11 @@ const Login = () => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: 'linear-gradient(135deg, #cba052, #a67d36)', boxShadow: '0 0 30px rgba(203,160,82,0.3)' }}
-          >
-            <Scissors size={28} style={{ color: '#111' }} />
-          </div>
+          <img 
+            src="/logos/Logo-ElBraddock-Dourado.png" 
+            alt="El Braddock" 
+            className="w-32 mx-auto mb-6 drop-shadow-[0_0_20px_rgba(203,160,82,0.2)]" 
+          />
           <h1 className="text-2xl font-display font-bold">Entrar</h1>
           <p className="text-sm mt-1" style={{ color: 'var(--color-barber-gray)' }}>Acesse seu perfil e histórico de cortes</p>
         </div>

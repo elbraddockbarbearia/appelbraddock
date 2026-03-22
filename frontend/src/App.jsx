@@ -5,8 +5,11 @@ import { Scissors } from 'lucide-react';
 // Loading Fallback Component
 const PageLoader = () => (
   <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-barber-black text-barber-gold">
-    <Scissors size={40} className="animate-spin duration-1000 mb-4" />
-    <h2 className="text-xl font-display font-bold tracking-widest animate-pulse">EL BRADDOCK</h2>
+    <img 
+      src="/logos/Logo-ElBraddock-Dourado.png" 
+      alt="El Braddock" 
+      className="w-32 animate-pulse mb-4" 
+    />
   </div>
 );
 
@@ -22,6 +25,7 @@ const Register = lazy(() => import('./pages/Client/Register'));
 const AdminLogin = lazy(() => import('./pages/Admin/Login'));
 const AdminDashboard = lazy(() => import('./pages/Admin/Dashboard'));
 const AdminAgenda = lazy(() => import('./pages/Admin/Agenda'));
+const AdminMensalidade = lazy(() => import('./pages/Admin/Mensalidade'));
 const AdminCashier = lazy(() => import('./pages/Admin/Cashier'));
 const AdminRanking = lazy(() => import('./pages/Admin/Ranking'));
 const AdminSettings = lazy(() => import('./pages/Admin/Settings'));
@@ -62,6 +66,7 @@ function App() {
             <Route element={<AdminRoute />}>
               <Route path="/admin"             element={<Suspense fallback={<PageLoader />}><AdminDashboard /></Suspense>} />
               <Route path="/admin/agenda"      element={<Suspense fallback={<PageLoader />}><AdminAgenda /></Suspense>} />
+              <Route path="/admin/mensalidade" element={<Suspense fallback={<PageLoader />}><AdminMensalidade /></Suspense>} />
               <Route path="/admin/ranking"     element={<Suspense fallback={<PageLoader />}><AdminRanking /></Suspense>} />
               <Route path="/admin/servicos"    element={<Suspense fallback={<PageLoader />}><AdminServicos /></Suspense>} />
               <Route path="/admin/barbeiros"   element={<Suspense fallback={<PageLoader />}><AdminBarbeiros /></Suspense>} />
